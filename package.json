@@ -1,0 +1,20 @@
+{
+  "name": "report-automation-vod",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alvinobarboza/report-automation-vod.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alvinobarboza/report-automation-vod/issues"
+  },
+  "homepage": "https://github.com/alvinobarboza/report-automation-vod#readme"
+}
