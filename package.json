@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/alvinobarboza/report-automation-vod/issues"
   },
-  "homepage": "https://github.com/alvinobarboza/report-automation-vod#readme"
+  "homepage": "https://github.com/alvinobarboza/report-automation-vod#readme",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "dotenv": "^16.0.0",
+    "js-sha1": "^0.6.0",
+    "node-fetch": "^3.2.3"
+  }
 }
