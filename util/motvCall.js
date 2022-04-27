@@ -2,7 +2,7 @@ const axios = require('axios').default;
 const sha1 = require("js-sha1");
 
 const getReport = async (url, body, header) => {
-    console.table(body)
+    // console.table(body)
     try {
         const {data, status} = await axios({
             method: 'post',
