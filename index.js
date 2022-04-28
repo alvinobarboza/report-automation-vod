@@ -4,7 +4,12 @@ const {
     getVodsPackages, 
     getWatchedVods,
 } = require("./util/reports");
-const { customersPackagesValidation, groupVodsByWatchedAmount, vodsPackageValidation } = require("./util/validation");
+const { 
+    customersPackagesValidation, 
+    groupVodsByWatchedAmount, 
+    vodsPackageValidation, 
+    countValidCustomers 
+} = require("./util/validation");
 const { writeToFile } = require("./util/writeToFile");
 
 Promise.all(
@@ -21,10 +26,12 @@ Promise.all(
     vodsPackageValidation(vodsWatched, vodsPackages);
     const customersValidation = customersPackagesValidation(allCustomers);
     const vodsValidation = customersPackagesValidation(vodsWatched);
-    
-    const totalCustomers = allCustomers.length;
-    const totalStudioCustomers = customersValidation.studios.length;
-    const totalNacionaisKidsCustomers = customersValidation.nacionaisKids.length;
+
+    const { 
+        totalCustomers, 
+        totalStudioCustomers, 
+        totalNacionaisKidsCustomers
+    } = countValidCustomers( allCustomers, customersValidation );
 
     const groupedStudios = groupVodsByWatchedAmount(vodsValidation.studios);
     const groupedNacionaisKids = groupVodsByWatchedAmount(vodsValidation.nacionaisKids);
