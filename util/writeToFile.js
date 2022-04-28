@@ -1,4 +1,6 @@
 const excel = require('excel4node');
+const path = require('path');
+
 const { 
     getCurrentMonthYearNumeric, 
     getCurrentMonth, 
@@ -72,7 +74,7 @@ const writeStudiosReport = (data) => {
     const excelFormula = `=sum(C${MAIN_HEADER_ROWS_COUNT+2}:C${groupedStudios.length+MAIN_HEADER_ROWS_COUNT+1})`;
     workSheet.cell((groupedStudios.length+MAIN_HEADER_ROWS_COUNT+2),3).formula(excelFormula).style({...dataStyle2, font: { bold: true}});
 
-    workBook.write(`YPlay_SVOD_Studio - ${getCurrentMonth()}_${getCurrentYear()}.xlsx`);
+    workBook.write(path.join(__dirname,'..','output',`YPlay_SVOD_Studio - ${getCurrentMonth()}_${getCurrentYear()}.xlsx`));
 }
 
 const writeNacionaisKidsReport = (data) => {
@@ -120,8 +122,9 @@ const writeNacionaisKidsReport = (data) => {
     const excelFormula = `=sum(C${MAIN_HEADER_ROWS_COUNT+2}:C${groupedNacionaisKids.length+MAIN_HEADER_ROWS_COUNT+1})`;
     workSheet.cell((groupedNacionaisKids.length+MAIN_HEADER_ROWS_COUNT+2),3).formula(excelFormula).style({...dataStyle2, font: { bold: true}});
 
-    workBook.write(`YPlay_SVA_Nacional + KIDS - ${getCurrentMonth()}_${getCurrentYear()}.xlsx`);
+    workBook.write(path.join(__dirname,'..','output',`YPlay_SVA_Nacional + KIDS - ${getCurrentMonth()}_${getCurrentYear()}.xlsx`));
 }
+
 
 module.exports = {
     writeToFile,
