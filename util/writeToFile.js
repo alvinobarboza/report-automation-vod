@@ -2,10 +2,10 @@ const excel = require('excel4node');
 const path = require('path');
 
 const { 
-    getCurrentMonthYearNumeric, 
+    getLastMonthYearNumeric, 
     getCurrentMonth, 
     getCurrentYear, 
-    getCurrentMonthYearShort 
+    getLastMonthYearShort 
 } = require('./date');
 const { 
     headerStyle,
@@ -40,12 +40,12 @@ const writeStudiosReport = (data) => {
     const MAIN_HEADER_ROWS_COUNT = 14;
     const SECONDARY_HEADER = ['Título','Formato', 'Acessos'];
     const workBook = new excel.Workbook();
-    const workSheet = workBook.addWorksheet(getCurrentMonthYearNumeric());
+    const workSheet = workBook.addWorksheet(getLastMonthYearNumeric());
 
     workSheet.column(1).setWidth(50);
     workSheet.cell(1,1,1,3,true).string(MAIN_HEADER).style(headerStyle);
     workSheet.cell(3,2).string('Período').style(dataStyle2);
-    workSheet.cell(3,3).string(getCurrentMonthYearShort()).style(dataStyle2);
+    workSheet.cell(3,3).string(getLastMonthYearShort()).style(dataStyle2);
     workSheet.cell(5,1).string('Operadora').style(dataStyle1);
     workSheet.cell(5,2).string('YPlay').style(dataStyle2);
     workSheet.cell(7,1).string('Assinantes cadastrados na Plataforma').style(dataStyle1);
@@ -88,12 +88,12 @@ const writeNacionaisKidsReport = (data) => {
     const MAIN_HEADER_ROWS_COUNT = 14;
     const SECONDARY_HEADER = ['Título','Formato', 'Acessos'];
     const workBook = new excel.Workbook();
-    const workSheet = workBook.addWorksheet(getCurrentMonthYearNumeric());
+    const workSheet = workBook.addWorksheet(getLastMonthYearNumeric());
 
     workSheet.column(1).setWidth(50);
     workSheet.cell(1,1,1,3,true).string(MAIN_HEADER).style(headerStyle);
     workSheet.cell(3,2).string('Período').style(dataStyle2);
-    workSheet.cell(3,3).string(getCurrentMonthYearShort()).style(dataStyle2);
+    workSheet.cell(3,3).string(getLastMonthYearShort()).style(dataStyle2);
     workSheet.cell(5,1).string('Operadora').style(dataStyle1);
     workSheet.cell(5,2).string('YPlay').style(dataStyle2);
     workSheet.cell(7,1).string('Assinantes cadastrados na Plataforma').style(dataStyle1);
