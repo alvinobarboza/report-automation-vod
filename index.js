@@ -1,4 +1,4 @@
-const { reportAllcustomers, reportVodWatched, reportVodPackage } = require("./util/dataModel"); //testing only
+//const { reportAllcustomers, reportVodWatched, reportVodPackage } = require("./util/dataModel"); //testing only
 const { 
     getAllCustomers, 
     getVodsPackages, 
