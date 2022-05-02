@@ -24,7 +24,9 @@ const getCurrentYear = () => {
 }
 
 const getLastMonthYearShort = () => {
-    const date = (new Date).toLocaleString('pt-BR', {month: 'short', year: '2-digit'})
+    const tempDate = new Date();
+    const date = (new Date(tempDate.getFullYear(), tempDate.getMonth()-1))
+        .toLocaleString('pt-BR', {month: 'short', year: '2-digit'})
         .toLocaleLowerCase();
     return date.substring(0,3) +'/'+ date.substring(date.length-2);
 }
