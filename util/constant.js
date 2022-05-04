@@ -1,5 +1,7 @@
-const SMSURL = 'https://sms.yplay.com.br';
-const MWURL = 'https://mw.yplay.com.br';
+const SMSURLYPLAY = 'https://sms.yplay.com.br';
+const MWURLYPLAY = 'https://mw.yplay.com.br';
+const SMSURLSUMICITY = 'https://sms.sumicity.net.br';
+const MWURLSUMICITY = 'https://mw.sumicity.net.br';
 const REPORT = '/api/report/reportSelection';
 
 const smsBody = (id) => `{
@@ -23,8 +25,10 @@ const mwHeader = (token) => {
 }
 
 module.exports = {
-    SMSURL,
-    MWURL,
+    SMSURLYPLAY,
+    MWURLYPLAY,
+    SMSURLSUMICITY,
+    MWURLSUMICITY,
     REPORT,
     smsBody,
     mwBody,

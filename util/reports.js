@@ -1,55 +1,98 @@
-const { mwBody, mwHeader, MWURL } = require('./constant');
-const { SMSURL, REPORT, smsBody, smsHeader } = require('./constant');
+const { mwBody, mwHeader, MWURLYPLAY, MWURLSUMICITY } = require('./constant');
+const { SMSURLYPLAY, REPORT, smsBody, smsHeader } = require('./constant');
 const { getReport, getToken } = require('./motvCall.js');
 
 require('dotenv').config();
 
-const loginSMS = process.env.loginSMS;
-const secretSMS = process.env.secretSMS;
+const loginSMS_Yplay = process.env.loginSMS_Yplay;
+const secretSMS_Yplay = process.env.secretSMS_Yplay;
 
-const loginMW = process.env.loginMW;
-const secretMW = process.env.secretMW;
+const loginMW_Yplay = process.env.loginMW_Yplay;
+const secretMW_Yplay = process.env.secretMW_Yplay;
 
-const GETALLCUSTOMERS = 131;
+const loginMW_Sumicity = process.env.loginMW_Sumicity;
+const secretMW_Sumicity = process.env.secretMW_Sumicity;
 
-const GETWATCHEDVODS = 99;
-const GETVODSPACKAGES = 106;
+const GETALLCUSTOMERSYPLAY = 131;
+const GETALLCUSTOMERSSUMICITY = 54;
 
-const getAllCustomers = () =>  getReport(
-    SMSURL+REPORT, 
-    smsBody(GETALLCUSTOMERS), 
+const GETWATCHEDVODSYPLAY = 99;
+const GETWATCHEDVODSSUMICITY = 46;
+const GETVODSPACKAGESYPLAY = 106;
+const GETVODSPACKAGESSUMICITY = 55;
+
+
+const getAllCustomersYplay = () =>  getReport(
+    SMSURLYPLAY+REPORT, 
+    smsBody(GETALLCUSTOMERSYPLAY), 
     smsHeader(
         getToken(
-            loginSMS, 
-            secretSMS
+            loginSMS_Yplay, 
+            secretSMS_Yplay
         )
     )
 );
 
-const getWatchedVods = () =>  getReport(
-    MWURL+REPORT, 
-    mwBody(GETWATCHEDVODS), 
+const getWatchedVodsYplay = () =>  getReport(
+    MWURLYPLAY+REPORT, 
+    mwBody(GETWATCHEDVODSYPLAY), 
     mwHeader(
         getToken(
-            loginMW, 
-            secretMW
+            loginMW_Yplay, 
+            secretMW_Yplay
         )
     )
 );
 
-const getVodsPackages = () =>  getReport(
-    MWURL+REPORT, 
-    mwBody(GETVODSPACKAGES), 
+const getVodsPackagesYplay = () =>  getReport(
+    MWURLYPLAY+REPORT, 
+    mwBody(GETVODSPACKAGESYPLAY), 
     mwHeader(
         getToken(
-            loginMW, 
-            secretMW
+            loginMW_Yplay, 
+            secretMW_Yplay
+        )
+    )
+);
+
+const getAllCustomersSumicity = () =>  getReport(
+    MWURLSUMICITY+REPORT, 
+    mwBody(GETALLCUSTOMERSSUMICITY), 
+    mwHeader(
+        getToken(
+            loginMW_Sumicity, 
+            secretMW_Sumicity
+        )
+    )
+);
+
+const getWatchedVodsSumicity = () =>  getReport(
+    MWURLSUMICITY+REPORT, 
+    mwBody(GETWATCHEDVODSSUMICITY), 
+    mwHeader(
+        getToken(
+            loginMW_Sumicity, 
+            secretMW_Sumicity
+        )
+    )
+);
+
+const getVodsPackagesSumicity = () =>  getReport(
+    MWURLSUMICITY+REPORT, 
+    mwBody(GETVODSPACKAGESSUMICITY), 
+    mwHeader(
+        getToken(
+            loginMW_Sumicity, 
+            secretMW_Sumicity
         )
     )
 );
 
 module.exports = {
-    getAllCustomers,
-    getWatchedVods,
-    getVodsPackages
+    getAllCustomersYplay,
+    getAllCustomersSumicity,
+    getWatchedVodsYplay,
+    getWatchedVodsSumicity,
+    getVodsPackagesYplay,
+    getVodsPackagesSumicity
 }

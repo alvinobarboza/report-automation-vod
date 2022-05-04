@@ -1,13 +1,34 @@
 const KIDS = 'SVOD Kids';
 const NACIONAL = 'SVOD Nacional';
 const STUDIO = 'SVOD Studio';
+const SUMICITY_MOVIES = 'Sumicity Movies';
+
+const validateVodsWatchedSumicity = (data) => {
+    const moviesVods = [];
+    const restVods = [];
+     
+    data.forEach(e => {
+        if(e.package.includes(SUMICITY_MOVIES) && e.vodpackage === SUMICITY_MOVIES){
+            moviesVods.push(e);
+        }else{
+            restVods.push(e);
+        }
+    });
+    return { moviesVods, restVods };
+}
+
+const validateCustomersSumicity = (data) => {
+    const sumicityMoviesCustomers = data.filter(d=>d.package.includes(SUMICITY_MOVIES));
+    const restCustomers = data.filter(d=>!d.package.includes(SUMICITY_MOVIES));
+    return { sumicityMoviesCustomers, restCustomers };
+}
 
 const vodsPackageValidation = (vodsWatched, vodsPackages) => {
     vodsWatched.forEach((v, i) => {
         let found = false;
         vodsPackages.forEach(vp=>{
             if(v.vodsid === vp.vodsid){
-                vodsWatched[i].vodpackage = vp.package
+                vodsWatched[i].vodpackage = vp.package;
                 found = true;
             }
         });
@@ -17,14 +38,14 @@ const vodsPackageValidation = (vodsWatched, vodsPackages) => {
     })
 }
 
-const customersPackagesValidation = (unvalidated) => {
+const customersPackagesValidationYplay = (unvalidated) => {
     const studios = unvalidated.filter(data =>  data.package.toLowerCase().includes('studio'));
     const nacionaisKids = unvalidated.filter(data => (data.package.toLowerCase().includes('svod') && !(data.package.toLowerCase().includes('studio'))));    
     const rest = unvalidated.filter(data => !(data.package.toLowerCase().includes('svod')));
     return {studios,nacionaisKids,rest};
 }
 
-const groupVodsByWatchedAmount = (vods) => {
+const groupVodsByWatchedAmountYplay = (vods) => {
     const vodsGroupSet = new Set();
     vods.forEach(vod => {
         if(
@@ -75,10 +96,55 @@ const groupVodsByWatchedAmount = (vods) => {
     return vodsGrooupArray;
 }
 
-const countValidCustomers = (allCustomers, customersValidation) => {
-    let totalCustomers = 0;
-    let totalStudioCustomers = 0;
-    let totalNacionaisKidsCustomers = 0;
+const groupVodsByWatchedAmountSumicity = (vods) => {
+    const vodsGroupSet = new Set();
+    vods.forEach(vod => {
+        if(            
+            !(
+                vod.login.toLowerCase().includes('.demo') ||
+                vod.login.toLowerCase().includes('demo.') ||
+                vod.login.toLowerCase().includes('test') ||
+                vod.login.toLowerCase().includes('youcast') ||
+                vod.login.toLowerCase().includes('.yc') ||
+                vod.login.toLowerCase().includes('yc.') ||
+                vod.login.toLowerCase().includes('trial') ||
+                vod.login.toLowerCase().includes('yplay')
+            )
+        ){
+            vodsGroupSet.add(vod.vodsid);
+        }
+    });
+
+    const vodsGrooupArray = [];
+
+    vodsGroupSet.forEach(vod => {
+        vodsGrooupArray.push({
+            vodsid: vod,
+        })
+    });
+
+    vodsGrooupArray.forEach((vodGrouped, index) => {
+        let counter = 0;
+        let vodName = '';
+        let vodPackage = '';
+        vods.forEach(v => {
+            if(v.vodsid === vodGrouped.vodsid){
+                counter++;
+                vodName = v.vod;
+                vodPackage = v.vodpackage;
+            }
+        })
+        vodsGrooupArray[index].vodname = vodName;
+        vodsGrooupArray[index].package = vodPackage;
+        vodsGrooupArray[index].amountwatched = counter;
+    });
+    return vodsGrooupArray;
+}
+
+const countValidCustomersYplay = (allCustomers, customersValidation) => {
+    let totalCustomersYplay = 0;
+    let totalStudioCustomersYplay = 0;
+    let totalNacionaisKidsCustomersYplay = 0;
 
     allCustomers.forEach(c => {
         if(!(
@@ -91,7 +157,7 @@ const countValidCustomers = (allCustomers, customersValidation) => {
             c.login.toLowerCase().includes('trial') ||
             c.login.toLowerCase().includes('yplay')
         )){
-            totalCustomers++;
+            totalCustomersYplay++;
         }
     });
 
@@ -106,7 +172,7 @@ const countValidCustomers = (allCustomers, customersValidation) => {
             c.login.toLowerCase().includes('trial') ||
             c.login.toLowerCase().includes('yplay')
         )){
-            totalStudioCustomers++;
+            totalStudioCustomersYplay++;
         }
     });
 
@@ -121,20 +187,64 @@ const countValidCustomers = (allCustomers, customersValidation) => {
             c.login.toLowerCase().includes('trial') ||
             c.login.toLowerCase().includes('yplay')
         )){
-            totalNacionaisKidsCustomers++;
+            totalNacionaisKidsCustomersYplay++;
         }
     });
 
     return { 
-        totalCustomers, 
-        totalStudioCustomers, 
-        totalNacionaisKidsCustomers
+        totalCustomersYplay, 
+        totalStudioCustomersYplay, 
+        totalNacionaisKidsCustomersYplay
+    };
+}
+
+const countValidCustomersSumicity = (allCustomers, customersValidation) => {
+    let totalCustomersSumicity = 0;
+    let totalMoviesCustomersSumicity = 0;
+
+    allCustomers.forEach(c => {
+        if(!(
+            c.login.toLowerCase().includes('.demo') ||
+            c.login.toLowerCase().includes('demo.') ||
+            c.login.toLowerCase().includes('test') ||
+            c.login.toLowerCase().includes('youcast') ||
+            c.login.toLowerCase().includes('.yc') ||
+            c.login.toLowerCase().includes('yc.') ||
+            c.login.toLowerCase().includes('trial') ||
+            c.login.toLowerCase().includes('yplay')
+        )){
+            totalCustomersSumicity++;
+        }
+    });
+
+    customersValidation.forEach(c => {
+        if(!(
+            c.login.toLowerCase().includes('.demo') ||
+            c.login.toLowerCase().includes('demo.') ||
+            c.login.toLowerCase().includes('test') ||
+            c.login.toLowerCase().includes('youcast') ||
+            c.login.toLowerCase().includes('.yc') ||
+            c.login.toLowerCase().includes('yc.') ||
+            c.login.toLowerCase().includes('trial') ||
+            c.login.toLowerCase().includes('yplay')
+        )){
+            totalMoviesCustomersSumicity++;
+        }
+    });
+
+    return { 
+        totalCustomersSumicity, 
+        totalMoviesCustomersSumicity,         
     };
 }
 
 module.exports = {
-    customersPackagesValidation,
-    groupVodsByWatchedAmount,
+    validateVodsWatchedSumicity,
+    validateCustomersSumicity,
+    customersPackagesValidationYplay,
+    groupVodsByWatchedAmountYplay,
+    groupVodsByWatchedAmountSumicity,
     vodsPackageValidation,
-    countValidCustomers
+    countValidCustomersYplay,
+    countValidCustomersSumicity,
 };

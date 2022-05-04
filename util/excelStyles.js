@@ -73,7 +73,6 @@ const dataStyle1 = {
 const dataStyle2 = {
     alignment: {
         horizontal: ['center'],
-        shrinkToFit: true,
         vertical: ['center']
     },
     font: {

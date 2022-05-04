@@ -1,47 +1,90 @@
-//const { reportAllcustomers, reportVodWatched, reportVodPackage } = require("./util/dataModel"); //testing only
+// const { 
+//     reportAllcustomers, 
+//     reportVodWatched, 
+//     reportVodPackage, 
+//     reportAllCustomersSumcity, 
+//     reportVodPackageSumicity, 
+//     reportVodWatchedSumicity 
+// } = require("./util/dataModel"); //testing only
+
 const { 
-    getAllCustomers, 
-    getVodsPackages, 
-    getWatchedVods,
+    getAllCustomersYplay, 
+    getVodsPackagesYplay, 
+    getWatchedVodsYplay,
+    getAllCustomersSumicity,
+    getVodsPackagesSumicity,
+    getWatchedVodsSumicity,
 } = require("./util/reports");
 const { 
-    customersPackagesValidation, 
-    groupVodsByWatchedAmount, 
+    customersPackagesValidationYplay, 
+    groupVodsByWatchedAmountYplay, 
     vodsPackageValidation, 
-    countValidCustomers 
+    countValidCustomersYplay, 
+    validateVodsWatchedSumicity,
+    validateCustomersSumicity,
+    groupVodsByWatchedAmountSumicity,
+    countValidCustomersSumicity,
 } = require("./util/validation");
 const { writeToFile } = require("./util/writeToFile");
 
+
+
+//     writeToFile({
+
+//     });
+// })
+// .catch(e=>console.log(e));
+
+
+
 Promise.all(
     [
-        getAllCustomers(),
-        getVodsPackages(),
-        getWatchedVods()
+        getAllCustomersYplay(),
+        getVodsPackagesYplay(),
+        getWatchedVodsYplay(),
+        getAllCustomersSumicity(),
+        getVodsPackagesSumicity(),
+        getWatchedVodsSumicity()
     ]
 ).then( data => {
-    const allCustomers = data[0].response.rows;
-    const vodsPackages = data[1].response.rows;
-    const vodsWatched = data[2].response.rows;
+    const allCustomersYplay = data[0].response.rows;
+    const vodsPackagesYplay = data[1].response.rows;
+    const vodsWatchedYplay = data[2].response.rows;
+    const allCustomersSumicity = data[3].response.rows;
+    const vodsPackagesSumicity = data[4].response.rows;
+    const vodsWatchedSumicity = data[5].response.rows;
 
-    vodsPackageValidation(vodsWatched, vodsPackages);
-    const customersValidation = customersPackagesValidation(allCustomers);
-    const vodsValidation = customersPackagesValidation(vodsWatched);
+    //Yplay reports
+    vodsPackageValidation(vodsWatchedYplay, vodsPackagesYplay);
+    const customersValidation = customersPackagesValidationYplay(allCustomersYplay);
+    const vodsValidation = customersPackagesValidationYplay(vodsWatchedYplay);
 
     const { 
-        totalCustomers, 
-        totalStudioCustomers, 
-        totalNacionaisKidsCustomers
-    } = countValidCustomers( allCustomers, customersValidation );
+        totalCustomersYplay, 
+        totalStudioCustomersYplay, 
+        totalNacionaisKidsCustomersYplay
+    } = countValidCustomersYplay( allCustomersYplay, customersValidation );
 
-    const groupedStudios = groupVodsByWatchedAmount(vodsValidation.studios);
-    const groupedNacionaisKids = groupVodsByWatchedAmount(vodsValidation.nacionaisKids);
+    const groupedStudios = groupVodsByWatchedAmountYplay(vodsValidation.studios);
+    const groupedNacionaisKids = groupVodsByWatchedAmountYplay(vodsValidation.nacionaisKids);
+    
+    //Sumicity Reports
+    vodsPackageValidation(vodsWatchedSumicity, vodsPackagesSumicity);
+    const { moviesVods } = validateVodsWatchedSumicity(vodsWatchedSumicity);
+    const { sumicityMoviesCustomers } = validateCustomersSumicity(allCustomersSumicity);
+    const groupedMovies = groupVodsByWatchedAmountSumicity(moviesVods);
+    const {totalCustomersSumicity,totalMoviesCustomersSumicity} = countValidCustomersSumicity(allCustomersSumicity, sumicityMoviesCustomers);
 
     writeToFile({
         groupedStudios, 
         groupedNacionaisKids, 
-        totalCustomers, 
-        totalNacionaisKidsCustomers, 
-        totalStudioCustomers
+        totalCustomersYplay, 
+        totalNacionaisKidsCustomersYplay, 
+        totalStudioCustomersYplay,
+        groupedMovies, 
+        totalCustomersSumicity, 
+        totalMoviesCustomersSumicity
     });
+   
 })
 .catch(e=>console.log(e));
