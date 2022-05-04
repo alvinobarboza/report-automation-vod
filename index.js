@@ -27,16 +27,6 @@ const {
 } = require("./util/validation");
 const { writeToFile } = require("./util/writeToFile");
 
-
-
-//     writeToFile({
-
-//     });
-// })
-// .catch(e=>console.log(e));
-
-
-
 Promise.all(
     [
         getAllCustomersYplay(),
