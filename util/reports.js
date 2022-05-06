@@ -17,6 +17,7 @@ const GETALLCUSTOMERSYPLAY = 131;
 const GETALLCUSTOMERSSUMICITY = 54;
 
 const GETWATCHEDVODSYPLAY = 99;
+const GETPRODUCTTVOD = 110;
 const GETWATCHEDVODSSUMICITY = 46;
 const GETVODSPACKAGESYPLAY = 106;
 const GETVODSPACKAGESSUMICITY = 55;
@@ -47,6 +48,17 @@ const getWatchedVodsYplay = () =>  getReport(
 const getVodsPackagesYplay = () =>  getReport(
     MWURLYPLAY+REPORT, 
     mwBody(GETVODSPACKAGESYPLAY), 
+    mwHeader(
+        getToken(
+            loginMW_Yplay, 
+            secretMW_Yplay
+        )
+    )
+);
+
+const getTvodsPackagesYplay = () =>  getReport(
+    MWURLYPLAY+REPORT, 
+    mwBody(GETPRODUCTTVOD), 
     mwHeader(
         getToken(
             loginMW_Yplay, 
@@ -94,5 +106,6 @@ module.exports = {
     getWatchedVodsYplay,
     getWatchedVodsSumicity,
     getVodsPackagesYplay,
+    getTvodsPackagesYplay,
     getVodsPackagesSumicity
 }

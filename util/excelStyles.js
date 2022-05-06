@@ -1,7 +1,6 @@
 const headerStyle = {
     alignment: {
         horizontal: ['center'],
-        shrinkToFit: true,
         vertical: ['center']
     },
     font: {
@@ -37,7 +36,6 @@ const headerStyle = {
 const dataStyle1 = {
     alignment: {
         horizontal: ['right'],
-        shrinkToFit: true,
         vertical: ['center']
     },
     font: {
@@ -108,7 +106,6 @@ const dataStyle2 = {
 const dataStyle3 = {
     alignment: {
         horizontal: ['left'],
-        shrinkToFit: true,
         vertical: ['center']
     },
     font: {
@@ -140,9 +137,125 @@ const dataStyle3 = {
         },
     }
 }
+
+const headerStyleTVOD1 = {
+    alignment: {
+        horizontal: ['center'],
+        vertical: ['center'],
+        wrapText: true,
+    },
+    font: {
+        color: '#ffffff',
+        bold: true,
+        size: 11
+    },
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        bgColor: '#5b9bd5',
+        fgColor: '#5b9bd5',
+    },
+    border: { 
+        left: {
+            style: 'thin', 
+            color: '#000000' 
+        },
+        right: {
+            style: 'thin', 
+            color: '#000000'
+        },
+        top: {
+            style: 'thin', 
+            color: '#000000'
+        },
+        bottom: {
+            style: 'thin', 
+            color: '#000000'
+        },
+    }
+}
+
+const headerStyleTVOD2 = {
+    alignment: {
+        horizontal: ['center'],
+        vertical: ['center'],
+        wrapText: true,
+    },
+    font: {
+        color: '#ffffff',
+        bold: true,
+        size: 11
+    },
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        bgColor: '#1f4e78',
+        fgColor: '#1f4e78',
+    },
+    border: { 
+        left: {
+            style: 'thin', 
+            color: '#000000' 
+        },
+        right: {
+            style: 'thin', 
+            color: '#000000'
+        },
+        top: {
+            style: 'thin', 
+            color: '#000000'
+        },
+        bottom: {
+            style: 'thin', 
+            color: '#000000'
+        },
+    }
+}
+const fillStyleTVOD = {
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        bgColor: '#bfbfbf',
+        fgColor: '#bfbfbf',
+    },
+}
+
+const dataStyleTvod = {
+    alignment: {
+        horizontal: ['center'],
+        vertical: ['center']
+    },
+    font: {
+        color: '#000000',
+        size: 11
+    },
+    border: { 
+        left: {
+            style: 'thin', 
+            color: '#000000' 
+        },
+        right: {
+            style: 'thin', 
+            color: '#000000'
+        },
+        top: {
+            style: 'thin', 
+            color: '#000000'
+        },
+        bottom: {
+            style: 'thin', 
+            color: '#000000'
+        },
+    }
+}
+
 module.exports = {
     headerStyle,
     dataStyle1,
     dataStyle2,
-    dataStyle3
+    dataStyle3,
+    headerStyleTVOD1,
+    headerStyleTVOD2,
+    fillStyleTVOD,
+    dataStyleTvod
 }

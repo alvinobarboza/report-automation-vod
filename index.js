@@ -1,10 +1,6 @@
 // const { 
-//     reportAllcustomers, 
-//     reportVodWatched, 
-//     reportVodPackage, 
-//     reportAllCustomersSumcity, 
-//     reportVodPackageSumicity, 
-//     reportVodWatchedSumicity 
+//     reportTvodPackage,
+//     reportVodWatched
 // } = require("./util/dataModel"); //testing only
 
 const { 
@@ -14,6 +10,7 @@ const {
     getAllCustomersSumicity,
     getVodsPackagesSumicity,
     getWatchedVodsSumicity,
+    getTvodsPackagesYplay,
 } = require("./util/reports");
 const { 
     customersPackagesValidationYplay, 
@@ -24,8 +21,9 @@ const {
     validateCustomersSumicity,
     groupVodsByWatchedAmountSumicity,
     countValidCustomersSumicity,
+    countTvodWatched,
 } = require("./util/validation");
-const { writeToFile } = require("./util/writeToFile");
+const { writeToFile, writeTvodReport } = require("./util/writeToFile");
 
 Promise.all(
     [
@@ -34,7 +32,8 @@ Promise.all(
         getWatchedVodsYplay(),
         getAllCustomersSumicity(),
         getVodsPackagesSumicity(),
-        getWatchedVodsSumicity()
+        getWatchedVodsSumicity(),
+        getTvodsPackagesYplay()
     ]
 ).then( data => {
     const allCustomersYplay = data[0].response.rows;
@@ -43,9 +42,12 @@ Promise.all(
     const allCustomersSumicity = data[3].response.rows;
     const vodsPackagesSumicity = data[4].response.rows;
     const vodsWatchedSumicity = data[5].response.rows;
+    const tvodPackagesYplay = data[6].response.rows;
 
     //Yplay reports
     vodsPackageValidation(vodsWatchedYplay, vodsPackagesYplay);
+    countTvodWatched(tvodPackagesYplay, vodsWatchedYplay);
+
     const customersValidation = customersPackagesValidationYplay(allCustomersYplay);
     const vodsValidation = customersPackagesValidationYplay(vodsWatchedYplay);
 
@@ -73,7 +75,8 @@ Promise.all(
         totalStudioCustomersYplay,
         groupedMovies, 
         totalCustomersSumicity, 
-        totalMoviesCustomersSumicity
+        totalMoviesCustomersSumicity,
+        tvodPackagesYplay
     });
    
 })

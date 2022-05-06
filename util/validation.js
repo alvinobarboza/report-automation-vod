@@ -3,6 +3,32 @@ const NACIONAL = 'SVOD Nacional';
 const STUDIO = 'SVOD Studio';
 const SUMICITY_MOVIES = 'Sumicity Movies';
 
+const countTvodWatched = (tvodPackage, tvodWatched) => {
+    tvodPackage.forEach((tvod, index) => {
+        let count = 0;        
+        tvodWatched.forEach(watched => {
+            if(
+                tvod.vodsid === watched.vodsid && 
+                watched.package.toLocaleLowerCase().includes('HSL - TVOD') &&
+                watched.vendor === 'HSL' &&
+                !(
+                    watched.login.toLowerCase().includes('.demo') ||
+                    watched.login.toLowerCase().includes('demo.') ||
+                    watched.login.toLowerCase().includes('test') ||
+                    watched.login.toLowerCase().includes('youcast') ||
+                    watched.login.toLowerCase().includes('.yc') ||
+                    watched.login.toLowerCase().includes('yc.') ||
+                    watched.login.toLowerCase().includes('trial') ||
+                    watched.login.toLowerCase().includes('yplay')
+                )
+            ){
+                count++;
+            }
+        });
+        tvodPackage[index].countCutomers = count;
+    });
+}
+
 const validateVodsWatchedSumicity = (data) => {
     const moviesVods = [];
     const restVods = [];
@@ -239,6 +265,7 @@ const countValidCustomersSumicity = (allCustomers, customersValidation) => {
 }
 
 module.exports = {
+    countTvodWatched,
     validateVodsWatchedSumicity,
     validateCustomersSumicity,
     customersPackagesValidationYplay,

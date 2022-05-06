@@ -19,6 +19,14 @@ const getCurrentMonth = () => {
 		.split('.')[0];
 }
 
+const getCurrentMonthLong = () => {
+    const tempDate = new Date();
+	return (new Date(tempDate.getFullYear(), tempDate.getMonth()-1))
+        .toLocaleString('pt-BR', {month: 'long'})
+		.toLocaleUpperCase()
+		.split('.')[0];
+}
+
 const getCurrentYear = () => {
 	return (new Date).getFullYear();
 }
@@ -31,10 +39,21 @@ const getLastMonthYearShort = () => {
     return date.substring(0,3) +'/'+ date.substring(date.length-2);
 }
 
+const getLastMonthYearLong = () => {
+    const tempDate = new Date();
+    const date = (new Date(tempDate.getFullYear(), tempDate.getMonth()-1))
+        .toLocaleString('pt-BR', {month: 'long', year: 'numeric'})
+        .toLocaleLowerCase();
+    const formatedDate = date.split(' ');
+    return `${formatedDate[0]}, ${formatedDate[2]}`;
+}
+
 module.exports = {
     getDate,
     getLastMonthYearNumeric,
     getCurrentMonth,
+    getCurrentMonthLong,
     getCurrentYear,
-    getLastMonthYearShort
+    getLastMonthYearShort,
+    getLastMonthYearLong
 }
