@@ -22,6 +22,7 @@ const {
     groupVodsByWatchedAmountSumicity,
     countValidCustomersSumicity,
     countTvodWatched,
+    validateTCMCustomers,
 } = require("./util/validation");
 const { writeToFile, writeTvodReport } = require("./util/writeToFile");
 
@@ -45,6 +46,8 @@ Promise.all(
     const tvodPackagesYplay = data[6].response.rows;
 
     //Yplay reports
+    const dataTCM = validateTCMCustomers(allCustomersYplay);
+
     vodsPackageValidation(vodsWatchedYplay, vodsPackagesYplay);
     countTvodWatched(tvodPackagesYplay, vodsWatchedYplay);
 
@@ -76,7 +79,8 @@ Promise.all(
         groupedMovies, 
         totalCustomersSumicity, 
         totalMoviesCustomersSumicity,
-        tvodPackagesYplay
+        tvodPackagesYplay,
+        dataTCM
     });
    
 })

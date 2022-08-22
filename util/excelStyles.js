@@ -33,6 +33,41 @@ const headerStyle = {
     }
 }
 
+const headerStyleTCM = {
+    alignment: {
+        horizontal: ['center'],
+        vertical: ['center']
+    },
+    font: {
+        color: '#ffffff',
+        bold: true
+    },
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        bgColor: '#70ad47',
+        fgColor: '#70ad47',
+    },
+    border: { 
+        left: {
+            style: 'thin', 
+            color: '#a9d08e' 
+        },
+        right: {
+            style: 'thin', 
+            color: '#a9d08e'
+        },
+        top: {
+            style: 'thin', 
+            color: '#a9d08e'
+        },
+        bottom: {
+            style: 'thin', 
+            color: '#a9d08e'
+        },
+    }
+}
+
 const dataStyle1 = {
     alignment: {
         horizontal: ['right'],
@@ -64,6 +99,33 @@ const dataStyle1 = {
         bottom: {
             style: 'thin', 
             color: '#000000'
+        },
+    }
+}
+
+const dataStyleTCM = {
+    alignment: {
+        horizontal: ['center'],
+        vertical: ['center']
+    },
+    font: {
+        color: '#000000',
+        size: 12
+    },
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        bgColor: '#e2efda',
+        fgColor: '#e2efda',
+    },
+    border: { 
+        top: {
+            style: 'thin', 
+            color: '#a9d08e'
+        },
+        bottom: {
+            style: 'thin', 
+            color: '#a9d08e'
         },
     }
 }
@@ -251,7 +313,9 @@ const dataStyleTvod = {
 
 module.exports = {
     headerStyle,
+    headerStyleTCM,
     dataStyle1,
+    dataStyleTCM,
     dataStyle2,
     dataStyle3,
     headerStyleTVOD1,
