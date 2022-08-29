@@ -11,6 +11,7 @@ const {
     getVodsPackagesSumicity,
     getWatchedVodsSumicity,
     getTvodsPackagesYplay,
+    getWatchedTvodsYplayHsl,
 } = require("./util/reports");
 const { 
     customersPackagesValidationYplay, 
@@ -34,7 +35,8 @@ Promise.all(
         getAllCustomersSumicity(),
         getVodsPackagesSumicity(),
         getWatchedVodsSumicity(),
-        getTvodsPackagesYplay()
+        getTvodsPackagesYplay(),
+        getWatchedTvodsYplayHsl()
     ]
 ).then( data => {
     const allCustomersYplay = data[0].response.rows;
@@ -44,6 +46,7 @@ Promise.all(
     const vodsPackagesSumicity = data[4].response.rows;
     const vodsWatchedSumicity = data[5].response.rows;
     const tvodPackagesYplay = data[6].response.rows;
+    const tvodWatchedYplayHsl = data[7].response.rows;
 
     //Yplay reports
     const dataTCM = validateTCMCustomers(allCustomersYplay);
@@ -80,7 +83,8 @@ Promise.all(
         totalCustomersSumicity, 
         totalMoviesCustomersSumicity,
         tvodPackagesYplay,
-        dataTCM
+        dataTCM,
+        tvodWatchedYplayHsl
     });
    
 })

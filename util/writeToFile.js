@@ -34,11 +34,13 @@ const writeToFile = (data) => {
         totalCustomersSumicity, 
         totalMoviesCustomersSumicity,
         tvodPackagesYplay,
-        dataTCM
+        dataTCM,
+        tvodWatchedYplayHsl
     } = data;
 
     writeTCMVODReport(dataTCM);
     writeTvodReport(tvodPackagesYplay);
+    writeTvodReportHSL(tvodWatchedYplayHsl);
     writeMoviesReport({groupedMovies, totalCustomersSumicity, totalMoviesCustomersSumicity});
     writeStudiosReport({groupedStudios, totalCustomersYplay, totalStudioCustomersYplay});
     writeNacionaisKidsReport({groupedNacionaisKids, totalCustomersYplay, totalNacionaisKidsCustomersYplay});
@@ -281,6 +283,70 @@ const writeTvodReport = (data) => {
     });    
 
     workBook.write(path.join(__dirname,'..','output',`Yplay_TVOD - ${getCurrentMonth()}_${getCurrentYear()}.xlsx`));
+}
+
+const writeTvodReportHSL = (data) => {
+    const MAIN_HEADER = [
+        ['Customer', 13],
+        ['Period', 13],
+        ['MPM', 13],
+        ['Title - VOD', 41],
+        ['Transaction Description', 13],
+        ['Units Sold', 13],
+        ['Format', 11],
+        ['State', 9],
+        ['Retail Price', 15],
+        ['Sales Taxes', 13],
+        ['Net Retail Price',16],
+        ['',3],
+        ['Category',9],
+        ['% Share', 9],
+        ['% Net Price',11],
+        ['Minimum Fee',11],
+        ['Max Net x Min',11],
+        ['',3],
+        ['Amount Payable BRL', 17],
+        ['Exchange Rate', 12],
+        ['Amount Payable USD',9],
+        ['',3]
+    ];
+    const workBook = new excel.Workbook();
+    const workSheet = workBook.addWorksheet(getCurrentMonthLong());
+
+    workSheet.row(1).filter();
+    workSheet.row(1).setHeight(42);
+    let headerCheck = false;
+    MAIN_HEADER.forEach((value, index) => {
+        if (value[0] === '') {
+            headerCheck = true
+            workSheet.column(index+1).setWidth(value[1]);
+            workSheet.cell(1, index+1).string(value[0]).style(fillStyleTVOD);
+        }else if(headerCheck){
+            workSheet.column(index+1).setWidth(value[1]);
+            workSheet.cell(1, index+1).string(value[0]).style(headerStyleTVOD2);
+        }else {
+            workSheet.column(index+1).setWidth(value[1]);
+            workSheet.cell(1, index+1).string(value[0]).style(headerStyleTVOD1);
+        }
+    });
+    data.forEach( (d,i) => {
+        for (let index = 0; index < MAIN_HEADER.length; index++) {
+            if((index+1)===12 || (index+1)===18 || (index+1)===22){
+                workSheet.cell(i+2, index+1).string('').style(fillStyleTVOD);
+            }else{
+                workSheet.cell(i+2, index+1).string('').style(dataStyleTvod);
+            }
+        }
+        workSheet.cell(i+2, 1).string('Yplay');
+        workSheet.cell(i+2, 2).string(getLastMonthYearLong());
+        workSheet.cell(i+2, 4).string(d.vodsname);
+        workSheet.cell(i+2, 5).string('TVOD');
+        workSheet.cell(i+2, 6).number(d.watched);
+        workSheet.cell(i+2, 7).string('HD');
+        workSheet.cell(i+2, 8).string('SP');
+    });    
+
+    workBook.write(path.join(__dirname,'..','output',`Yplay_TVOD - ${getCurrentMonth()}_${getCurrentYear()} - HSL.xlsx`));
 }
 
 module.exports = {

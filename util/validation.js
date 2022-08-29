@@ -9,8 +9,8 @@ const countTvodWatched = (tvodPackage, tvodWatched) => {
         tvodWatched.forEach(watched => {
             if(
                 tvod.vodsid === watched.vodsid && 
-                watched.package.toLocaleLowerCase().includes('HSL - TVOD') &&
-                watched.vendor === 'HSL' &&
+                watched.package.toLocaleLowerCase().includes('TVOD') &&
+                watched.vendor !== 'HSL' &&
                 !(
                     watched.login.toLowerCase().includes('.demo') ||
                     watched.login.toLowerCase().includes('demo.') ||

@@ -22,6 +22,7 @@ const GETWATCHEDVODSSUMICITY = 46;
 const GETVODSPACKAGESYPLAY = 106;
 const GETVODSPACKAGESSUMICITY = 55;
 
+const TVODS_WATCHED_YPLAY_HSL = 117;
 
 const getAllCustomersYplay = () =>  getReport(
     SMSURLYPLAY+REPORT, 
@@ -30,6 +31,17 @@ const getAllCustomersYplay = () =>  getReport(
         getToken(
             loginSMS_Yplay, 
             secretSMS_Yplay
+        )
+    )
+);
+
+const getWatchedTvodsYplayHsl = () =>  getReport(
+    MWURLYPLAY+REPORT, 
+    mwBody(TVODS_WATCHED_YPLAY_HSL), 
+    mwHeader(
+        getToken(
+            loginMW_Yplay, 
+            secretMW_Yplay
         )
     )
 );
@@ -107,5 +119,6 @@ module.exports = {
     getWatchedVodsSumicity,
     getVodsPackagesYplay,
     getTvodsPackagesYplay,
+    getWatchedTvodsYplayHsl,
     getVodsPackagesSumicity
 }
