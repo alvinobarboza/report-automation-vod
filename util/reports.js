@@ -4,23 +4,51 @@ const { getReport, getToken } = require('./motvCall.js');
 
 require('dotenv').config();
 
-const loginSMS_Yplay = process.env.loginSMS_Yplay;
-const secretSMS_Yplay = process.env.secretSMS_Yplay;
+const LOGIN_SMS_YPLAY = process.env.loginSMS_Yplay;
+const SECRET_SMS_YPLAY = process.env.secretSMS_Yplay;
+
+const LOGIN_MW_YPLAY = process.env.loginMW;
+const SECRET_MW_YPLAY = process.env.secretMW;
 
 const GETALLCUSTOMERSYPLAY = 131;
+const GETALLCUSTOMERSYBOX = 106;
+const GETALLVODSWATCHEDYBOX = 110;
 
 const getAllCustomersYplay = () => getReport(
     SMSURLYPLAY + REPORT,
     smsBody(GETALLCUSTOMERSYPLAY),
     smsHeader(
         getToken(
-            loginSMS_Yplay,
-            secretSMS_Yplay
+            LOGIN_SMS_YPLAY,
+            SECRET_SMS_YPLAY
         )
     )
 );
 
+const getAllCustomersYbox = () => getReport(
+    MWURLYPLAY + REPORT,
+    mwBody(GETALLCUSTOMERSYBOX),
+    mwHeader(
+        getToken(
+            LOGIN_MW_YPLAY,
+            SECRET_MW_YPLAY
+        )
+    )
+);
+
+const getAllVodsWatchedYbox = () => getReport(
+    MWURLYPLAY + REPORT,
+    mwBody(GETALLVODSWATCHEDYBOX),
+    mwHeader(
+        getToken(
+            LOGIN_MW_YPLAY,
+            SECRET_MW_YPLAY
+        )
+    )
+);
 
 module.exports = {
     getAllCustomersYplay,
+    getAllCustomersYbox,
+    getAllVodsWatchedYbox
 }

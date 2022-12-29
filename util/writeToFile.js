@@ -6,9 +6,10 @@ const {
     getCurrentYear,
     getLastMonthYearShort,
     getCurrentMonthLong,
+    getLastMonthYearNumeric,
 } = require('./date');
 const sendEmail = require('./email/mailSender');
-const { headerStyleTCM, dataStyleTCM } = require('./excelStyles');
+const { headerStyleTCM, dataStyleTCM, headerStyle, dataStyle1, dataStyle2, dataStyle3 } = require('./excelStyles');
 
 const FILENAMES = [];
 
@@ -17,11 +18,16 @@ function insertFilenameToFilenames(file) {
 }
 
 const writeToFile = (data) => {
-    const { dataTCM } = data;
+    const { valideYbox, dataTCM } = data;
 
+    // TCM
     writeTCMVODReport(dataTCM);
 
+    // YBOX
+    writeYboxReport(valideYbox);
+
     sendEmail(FILENAMES).catch(e => console.log(e));
+
 }
 
 const writeTCMVODReport = (dataTCM) => {
@@ -54,6 +60,51 @@ const writeTCMVODReport = (dataTCM) => {
     const file = {
         filename: `Assinantes ativos com pacote TCM VOD - ${getCurrentMonth()}_${getCurrentYear()}.xlsx`,
         path: path.join(__dirname, '..', 'output', `Assinantes ativos com pacote TCM VOD - ${getCurrentMonth()}_${getCurrentYear()}.xlsx`)
+    }
+    insertFilenameToFilenames(file);
+    workBook.write(file.path);
+}
+
+const writeYboxReport = (data) => {
+    const MAIN_HEADER = 'YOUCAST';
+    let MAIN_HEADER_ROWS_COUNT = 9;
+    const SECONDARY_HEADER = ['Título', 'Formato', 'Acessos'];
+    const workBook = new excel.Workbook();
+    const workSheet = workBook.addWorksheet(getLastMonthYearNumeric());
+
+    workSheet.column(1).setWidth(50);
+    workSheet.cell(1, 1, 1, 3, true).string(MAIN_HEADER).style(headerStyle);
+    workSheet.cell(3, 2).string('Período').style(dataStyle2);
+    workSheet.cell(3, 3).string(getLastMonthYearShort()).style(dataStyle2);
+
+    workSheet.cell(5, 1).string('Assinantes Ativos com Acesso ao YBOX VOD/SVOD Nacional').style(dataStyle1);
+    workSheet.cell(5, 2).number(data.activecustomers.length).style(dataStyle2);
+    workSheet.cell(7, 1).string('QTD assinantes ativos que assistiram o conteúdo').style(dataStyle1);
+    workSheet.cell(7, 2).number(data.watchedcustomers.length).style(dataStyle2);
+
+    for (let i = 2; i <= MAIN_HEADER_ROWS_COUNT; i++) {
+        if (i % 2 === 0) {
+            workSheet.row(i).setHeight(8);
+            continue;
+        }
+    }
+
+    SECONDARY_HEADER.forEach((value, index) => workSheet.cell(MAIN_HEADER_ROWS_COUNT, index + 1).string(value).style(headerStyle));
+
+    let vodcount = 0;
+    data.vods.forEach((vod, index) => {
+        MAIN_HEADER_ROWS_COUNT++;
+        workSheet.cell(MAIN_HEADER_ROWS_COUNT, 1).string(vod.vod).style(dataStyle3);
+        workSheet.cell(MAIN_HEADER_ROWS_COUNT, 2).string('YBOX').style(dataStyle2);
+        workSheet.cell(MAIN_HEADER_ROWS_COUNT, 3).number(vod.group.length).style(dataStyle2);
+        vodcount += vod.group.length;
+    });
+    MAIN_HEADER_ROWS_COUNT++;
+    workSheet.cell(MAIN_HEADER_ROWS_COUNT, 3).number(vodcount).style({ ...dataStyle2, font: { bold: true } });
+
+    const file = {
+        filename: `YBOX VOD - ${getCurrentMonth()}_${getCurrentYear()}.xlsx`,
+        path: path.join(__dirname, '..', 'output', `YBOX VOD - ${getCurrentMonth()}_${getCurrentYear()}.xlsx`)
     }
     insertFilenameToFilenames(file);
     workBook.write(file.path);
