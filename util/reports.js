@@ -11,8 +11,8 @@ const LOGIN_MW_YPLAY = process.env.loginMW;
 const SECRET_MW_YPLAY = process.env.secretMW;
 
 const GETALLCUSTOMERSYPLAY = 131;
-const GETALLCUSTOMERSYBOX = 106;
-const GETALLVODSWATCHEDYBOX = 110;
+const GETALLCUSTOMERSYBOX = 132;
+const GETALLCUSTOMERSYBOXACTIVE = 106;
 
 const getAllCustomersYplay = () => getReport(
     SMSURLYPLAY + REPORT,
@@ -26,19 +26,19 @@ const getAllCustomersYplay = () => getReport(
 );
 
 const getAllCustomersYbox = () => getReport(
-    MWURLYPLAY + REPORT,
-    mwBody(GETALLCUSTOMERSYBOX),
-    mwHeader(
+    SMSURLYPLAY + REPORT,
+    smsBody(GETALLCUSTOMERSYBOX),
+    smsHeader(
         getToken(
-            LOGIN_MW_YPLAY,
-            SECRET_MW_YPLAY
+            LOGIN_SMS_YPLAY,
+            SECRET_SMS_YPLAY
         )
     )
 );
 
-const getAllVodsWatchedYbox = () => getReport(
+const getAllCustomersYboxActive = () => getReport(
     MWURLYPLAY + REPORT,
-    mwBody(GETALLVODSWATCHEDYBOX),
+    mwBody(GETALLCUSTOMERSYBOXACTIVE),
     mwHeader(
         getToken(
             LOGIN_MW_YPLAY,
@@ -50,5 +50,5 @@ const getAllVodsWatchedYbox = () => getReport(
 module.exports = {
     getAllCustomersYplay,
     getAllCustomersYbox,
-    getAllVodsWatchedYbox
+    getAllCustomersYboxActive
 }

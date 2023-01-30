@@ -15,33 +15,82 @@ function validateTCMCustomers(allCustomers) {
     return validData;
 }
 
-function validateYBOXVOD(active, watched) {
-    const data = {
-        activecustomers: [],
-        watchedcustomers: [],
-        vods: []
-    }
-
-    data.activecustomers = active;
-
-    const validatedCustomers = returnWatchedCustomerOnActiveList(watched, active);
-
-    data.watchedcustomers = groupData(validatedCustomers, 'customerid', 'login');
-    data.vods = groupData(validatedCustomers, 'vodsid', 'vod');
-
-    return data;
+function validateYBOXVOD(subscribed, active) {
+    const subscribedGroupedByDealer = groupByDealerByCustomer(subscribed);
+    return validateStatusAndReportability(subscribedGroupedByDealer, active);
 }
 
-function returnWatchedCustomerOnActiveList(watched, active) {
-    const validatedCustomers = [];
-    for (let i = 0; i < watched.length; i++) {
-        for (let j = 0; j < active.length; j++) {
-            if (watched[i].customerid === active[j].customerid) {
-                validatedCustomers.push(watched[i]);
+function groupByDealerByCustomer(subscribed) {
+    const group = groupData(subscribed, 'dealerid', 'dealer');
+    for (let i = 0; i < group.length; i++) {
+        group[i].group = groupData(group[i].group, 'idmw', 'login');
+    }
+    return group;
+}
+
+// loop through active customers and flag them on the grouped ones also check for valide packages
+function validateStatusAndReportability(subscribedGroupedByDealer, active) {
+
+    for (let activeindex = 0; activeindex < active.length; activeindex++) {
+        for (let dealerindex = 0; dealerindex < subscribedGroupedByDealer.length; dealerindex++) {
+            if (checkDealer(subscribedGroupedByDealer[dealerindex].dealerid)) {
+                subscribedGroupedByDealer[dealerindex]
+                    .dealertoreport = true;
+            }
+            for (let customerindex = 0; customerindex < subscribedGroupedByDealer[dealerindex].group.length; customerindex++) {
+                if (active[activeindex].idmw === subscribedGroupedByDealer[dealerindex].group[customerindex].idmw) {
+                    subscribedGroupedByDealer[dealerindex]
+                        .group[customerindex]
+                        .status = true;
+                }
             }
         }
     }
-    return validatedCustomers;
+
+    for (let dealerindex = 0; dealerindex < subscribedGroupedByDealer.length; dealerindex++) {
+        if (checkDealer(subscribedGroupedByDealer[dealerindex].dealerid)) {
+            for (let customerindex = 0; customerindex < subscribedGroupedByDealer[dealerindex].group.length; customerindex++) {
+                subscribedGroupedByDealer[dealerindex]
+                    .group[customerindex]
+                    .customertoreport = isCustomerReportable(subscribedGroupedByDealer[dealerindex].group[customerindex].group);
+            }
+        }
+    }
+
+    return subscribedGroupedByDealer;
+}
+
+function isCustomerReportable(arrayProducts) {
+    let check = false;
+    for (let i = 0; i < arrayProducts.length; i++) {
+        if (checkPackage(arrayProducts[i].packagesid)) {
+            check = true;
+        }
+    }
+    return check;
+}
+
+function checkDealer(delaerid) {
+    const dealerToExclude = [
+        1, // JACON dealer
+        5, // Youcast CSMS
+        7, // Z-Não-usar
+        22 // ADMIN-YOUCAST
+    ]
+    return !dealerToExclude.includes(delaerid);
+}
+
+function checkPackage(pacakgeid) {
+    const packagesToExclude = [
+        6, // Yplay monitoring
+        39, // Yplay Teste midia
+        692, // DEMO SEMPRE
+        715, // Pacote RIT TV
+        753, // LIGGA DEMO
+        755, // Demo - Grupo Conexão
+        778 // Projeto IG
+    ]
+    return !packagesToExclude.includes(pacakgeid);
 }
 
 function groupData(ungrouped, paramGrouper, extraParam) {
