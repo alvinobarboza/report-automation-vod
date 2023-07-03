@@ -1,7 +1,7 @@
 function validateTCMCustomers(allCustomers) {
     const validData = {
         total: 0,
-        customers: []
+        customers: [],
     };
     //very fancy count++
     const totalVODCustomers = allCustomers.reduce((prev, curr) => {
@@ -20,6 +20,26 @@ function validateYBOXVOD(subscribed, active) {
     return validateStatusAndReportability(subscribedGroupedByDealer, active);
 }
 
+function validateYboxTip(data) {
+    const temp = {};
+    const group = [];
+
+    for (const customer of data) {
+        if (temp[customer.vendor]) {
+            temp[customer.vendor].customers.push(customer);
+            temp[customer.vendor].total++;
+        } else {
+            temp[customer.vendor] = {
+                vendor: customer.vendor,
+                customers: [customer],
+                total: 1,
+            };
+            group.push(temp[customer.vendor]);
+        }
+    }
+    return group;
+}
+
 function groupByDealerByCustomer(subscribed) {
     const group = groupData(subscribed, 'dealerid', 'dealer');
     for (let i = 0; i < group.length; i++) {
@@ -30,29 +50,52 @@ function groupByDealerByCustomer(subscribed) {
 
 // loop through active customers and flag them on the grouped ones also check for valide packages
 function validateStatusAndReportability(subscribedGroupedByDealer, active) {
-
     for (let activeindex = 0; activeindex < active.length; activeindex++) {
-        for (let dealerindex = 0; dealerindex < subscribedGroupedByDealer.length; dealerindex++) {
+        for (
+            let dealerindex = 0;
+            dealerindex < subscribedGroupedByDealer.length;
+            dealerindex++
+        ) {
             if (checkDealer(subscribedGroupedByDealer[dealerindex].dealerid)) {
-                subscribedGroupedByDealer[dealerindex]
-                    .dealertoreport = true;
+                subscribedGroupedByDealer[dealerindex].dealertoreport = true;
             }
-            for (let customerindex = 0; customerindex < subscribedGroupedByDealer[dealerindex].group.length; customerindex++) {
-                if (active[activeindex].idmw === subscribedGroupedByDealer[dealerindex].group[customerindex].idmw) {
-                    subscribedGroupedByDealer[dealerindex]
-                        .group[customerindex]
-                        .status = true;
+            for (
+                let customerindex = 0;
+                customerindex <
+                subscribedGroupedByDealer[dealerindex].group.length;
+                customerindex++
+            ) {
+                if (
+                    active[activeindex].idmw ===
+                    subscribedGroupedByDealer[dealerindex].group[customerindex]
+                        .idmw
+                ) {
+                    subscribedGroupedByDealer[dealerindex].group[
+                        customerindex
+                    ].status = true;
                 }
             }
         }
     }
 
-    for (let dealerindex = 0; dealerindex < subscribedGroupedByDealer.length; dealerindex++) {
+    for (
+        let dealerindex = 0;
+        dealerindex < subscribedGroupedByDealer.length;
+        dealerindex++
+    ) {
         if (checkDealer(subscribedGroupedByDealer[dealerindex].dealerid)) {
-            for (let customerindex = 0; customerindex < subscribedGroupedByDealer[dealerindex].group.length; customerindex++) {
-                subscribedGroupedByDealer[dealerindex]
-                    .group[customerindex]
-                    .customertoreport = isCustomerReportable(subscribedGroupedByDealer[dealerindex].group[customerindex].group);
+            for (
+                let customerindex = 0;
+                customerindex <
+                subscribedGroupedByDealer[dealerindex].group.length;
+                customerindex++
+            ) {
+                subscribedGroupedByDealer[dealerindex].group[
+                    customerindex
+                ].customertoreport = isCustomerReportable(
+                    subscribedGroupedByDealer[dealerindex].group[customerindex]
+                        .group
+                );
             }
         }
     }
@@ -75,8 +118,8 @@ function checkDealer(delaerid) {
         1, // JACON dealer
         5, // Youcast CSMS
         7, // Z-Não-usar
-        22 // ADMIN-YOUCAST
-    ]
+        22, // ADMIN-YOUCAST
+    ];
     return !dealerToExclude.includes(delaerid);
 }
 
@@ -88,8 +131,8 @@ function checkPackage(pacakgeid) {
         715, // Pacote RIT TV
         753, // LIGGA DEMO
         755, // Demo - Grupo Conexão
-        778 // Projeto IG
-    ]
+        778, // Projeto IG
+    ];
     return !packagesToExclude.includes(pacakgeid);
 }
 
@@ -104,7 +147,7 @@ function groupData(ungrouped, paramGrouper, extraParam) {
             groupedData[ungrouped[i][paramGrouper]] = {
                 [paramGrouper]: ungrouped[i][paramGrouper],
                 [extraParam]: ungrouped[i][extraParam],
-                group: [ungrouped[i]]
+                group: [ungrouped[i]],
             };
         }
     }
@@ -116,5 +159,6 @@ function groupData(ungrouped, paramGrouper, extraParam) {
 
 module.exports = {
     validateTCMCustomers,
-    validateYBOXVOD
+    validateYBOXVOD,
+    validateYboxTip,
 };
