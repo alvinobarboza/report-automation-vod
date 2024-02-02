@@ -27,8 +27,8 @@ async function sendEmail(files) {
         `;
 
         let transporter = nodemailer.createTransport({
-            host: 'smtp.youcast.tv.br',
-            port: 587,
+            host: 'mail.youcast.tv.br',
+            port: 465,
             auth: {
                 user: EMAIL,
                 pass: PASSWD,
