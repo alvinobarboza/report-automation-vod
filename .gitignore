@@ -2,6 +2,7 @@
 reference/
 output/
 util/dataModel.js
+*.test.js
 
 # Logs
 logs
