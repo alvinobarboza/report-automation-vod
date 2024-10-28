@@ -4,6 +4,10 @@ const {
     MWURLYPLAY,
     MWURLSUMICITY,
     MWURLTIP,
+    REPORT_SCHEDULE,
+    lastestEntryFromScheduleBody,
+    REPORT_SCHEDULE_HISTORY,
+    downloadReportBody,
 } = require('./constant');
 const { SMSURLYPLAY, REPORT, smsBody, smsHeader } = require('./constant');
 const { getReport, getToken } = require('./motvCall.js');
@@ -22,6 +26,7 @@ const SECRET_MW_TIP = process.env.SECRET_MW_TIP;
 const GETALLCUSTOMERSYPLAY = 131;
 const GETALLCUSTOMERSYBOX = 132;
 const GETALLCUSTOMERSYBOXACTIVE = 106;
+const GETALLVODERNANY = 9;
 
 const GETALLCUSTOMERSYBOXACTIVE_TIP = 63;
 
@@ -53,9 +58,60 @@ const getAllCustomersYboxActiveTIP = () =>
         mwHeader(getToken(LOGIN_MW_TIP, SECRET_MW_TIP))
     );
 
+/**
+ * @returns {Promise<MotvResponse<RowsReport>>}
+ */
+const getLastestEntryFromSchedule = async () =>
+    getReport(
+        MWURLYPLAY + REPORT_SCHEDULE_HISTORY,
+        lastestEntryFromScheduleBody(GETALLVODERNANY),
+        mwHeader(getToken(LOGIN_MW_YPLAY, SECRET_MW_YPLAY))
+    );
+
+/**@param {number} id @returns {Promise<MotvResponse<ReportFile>>} */
+const downloadReport = async (id) =>
+    getReport(
+        MWURLYPLAY + REPORT_SCHEDULE,
+        downloadReportBody(id),
+        mwHeader(getToken(LOGIN_MW_YPLAY, SECRET_MW_YPLAY))
+    );
+
 module.exports = {
     getAllCustomersYplay,
     getAllCustomersYbox,
     getAllCustomersYboxActive,
     getAllCustomersYboxActiveTIP,
+    getLastestEntryFromSchedule,
+    downloadReport,
 };
+
+/**
+ * @typedef {object} RowsReport
+ * @property {LastestEntryFromSchedule[]} rows
+ * @property {number} row_count
+ */
+
+/**
+ * @typedef {object} LastestEntryFromSchedule
+ * @property {number} report_schedules_attachements_id
+ * @property {number} report_schedules_attachements_report_schedules_id
+ * @property {string} report_schedules_attachements_generated
+ * @property {string} report_schedules_attachements_path
+ * @property {string} report_schedules_attachements_type
+ * @property {string} report_schedules_attachements_note
+ * @property {number} report_schedules_attachements_duration
+ * @property {string} _class
+ */
+
+/**
+ * @typedef {object} ReportFile
+ * @property {string} filename
+ * @property {string} content
+ */
+
+/**
+ * @template T
+ * @typedef {object} MotvResponse
+ * @property {T} response
+ * @property {number} status
+ */
