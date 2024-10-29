@@ -3,6 +3,7 @@ reference/
 output/
 util/dataModel.js
 *.test.js
+*.xlsx
 
 # Logs
 logs
