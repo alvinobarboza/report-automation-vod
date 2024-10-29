@@ -9,6 +9,10 @@ const downloadCSVReportFromSchedule = async (scheduleHistory, download) => {
     const history = await scheduleHistory();
     const latest = getLastestEntry(history);
 
+    if (!latest?.report_schedules_attachements_id) {
+        return [[]];
+    }
+
     const fileData = await download(latest.report_schedules_attachements_id);
     const stringFileData = convertBase64ToString(fileData.response.content);
 

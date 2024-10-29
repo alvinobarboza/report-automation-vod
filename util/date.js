@@ -54,8 +54,12 @@ const getCurrentDate = () => {
     return new Date().toISOString().split('T')[0];
 };
 
+/**
+ * Retorna data atual menos 7 dias
+ * @returns {string}
+ */
 const getCurrentDateForScheduleHistory = () => {
-    let date = new Date();
+    let date = new Date(new Date().getTime() - 24 * 60 * 60 * 1000 * 7);
     let year = date.getFullYear();
     let month = ('0' + (date.getMonth() + 1)).slice(-2);
     let day = ('0' + date.getDate()).slice(-2);
