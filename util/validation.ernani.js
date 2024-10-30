@@ -14,10 +14,76 @@ const profiles = 12;
 const vods_group = 13;
 
 /**
+ * @param {string[][]} yplay
+ * @param {string[][]} unifique
+ * @param {string[][]} tip
+ * @returns {Dealer[]}
+ */
+function validateErnaniReport(yplay, unifique, tip) {
+    const yplayValidated = yplayValidation(yplay);
+    const otherPlatforms = validatePlatforms([...unifique, ...tip]);
+    return [...yplayValidated, ...otherPlatforms];
+}
+
+/**
  * @param {string[][]} data
  * @returns {Dealer[]}
  */
-function validateErnaniReport(data) {
+function validatePlatforms(data) {
+    /**@type {Dealer[]} */
+    const dealerData = [];
+
+    /**@type {DealerHashMap} */
+    const dealerTempHashMap = {};
+
+    const monthRange = new Date(
+        new Date().getTime() - 24 * 60 * 60 * 1000 * 32
+    );
+
+    for (const line of data) {
+        if (line.length < 14) {
+            continue;
+        }
+        if (line[0] === 'vendor' && line[line.length - 1] === 'vods_groups') {
+            continue;
+        }
+
+        const customer = customerData(line);
+        let lastMonthActive = 0;
+        for (const profile of customer.profiles) {
+            const dateUsed = new Date(profile.lastused);
+            if (dateUsed > monthRange) {
+                lastMonthActive = 1;
+            }
+        }
+
+        if (dealerTempHashMap[line[vendor]]) {
+            dealerTempHashMap[line[vendor]].customers.push(customer);
+            dealerTempHashMap[line[vendor]].lastMonthCount += lastMonthActive;
+        } else {
+            dealerTempHashMap[line[vendor]] = {
+                id: line[dealer_id],
+                name: line[vendor],
+                nomefantasia: '',
+                razaosocial: '',
+                cnpj: '',
+                cidade: '',
+                uf: '',
+                vendor: line[vendor],
+                lastMonthCount: lastMonthActive,
+                customers: [customer],
+            };
+            dealerData.push(dealerTempHashMap[line[vendor]]);
+        }
+    }
+    return dealerData;
+}
+
+/**
+ * @param {string[][]} data
+ * @returns {Dealer[]}
+ */
+function yplayValidation(data) {
     /**@type {Dealer[]} */
     const dealerData = [];
 
