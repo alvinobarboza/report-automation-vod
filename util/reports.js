@@ -23,10 +23,15 @@ const SECRET_MW_YPLAY = process.env.secretMW;
 const LOGIN_MW_TIP = process.env.LOGIN_MW_TIP;
 const SECRET_MW_TIP = process.env.SECRET_MW_TIP;
 
+const LOGIN_MW_UNIFIQUE = process.env.LOGIN_MW_UNIFIQUE;
+const SECRET_MW_UNIFIQUE = process.env.SECRET_MW_UNIFIQUE;
+
 const GETALLCUSTOMERSYPLAY = 131;
 const GETALLCUSTOMERSYBOX = 132;
 const GETALLCUSTOMERSYBOXACTIVE = 106;
-const GETALLVODERNANY = 9;
+const GETALLVODERNANY_YPLAY = 9;
+const GETALLVODERNANY_UNIFIQUE = 4;
+const GETALLVODERNANY_TIP = 3;
 
 const GETALLCUSTOMERSYBOXACTIVE_TIP = 63;
 
@@ -59,21 +64,30 @@ const getAllCustomersYboxActiveTIP = () =>
     );
 
 /**
+ * @param {number} id
+ * @param {string} platformUrl
+ * @param {string} login
+ * @param {string} secret
  * @returns {Promise<MotvResponse<RowsReport>>}
  */
-const getLastestEntryFromSchedule = async () =>
+const getLastestEntryFromSchedule = async (id, platformUrl, login, secret) =>
     getReport(
-        MWURLYPLAY + REPORT_SCHEDULE_HISTORY,
-        lastestEntryFromScheduleBody(GETALLVODERNANY),
-        mwHeader(getToken(LOGIN_MW_YPLAY, SECRET_MW_YPLAY))
+        platformUrl + REPORT_SCHEDULE_HISTORY,
+        lastestEntryFromScheduleBody(id),
+        mwHeader(getToken(login, secret))
     );
 
-/**@param {number} id @returns {Promise<MotvResponse<ReportFile>>} */
-const downloadReport = async (id) =>
+/**
+ * @param {number} id
+ * @param {string} platformUrl
+ * @param {string} login
+ * @param {string} secret
+ * @returns {Promise<MotvResponse<ReportFile>>} */
+const downloadReport = async (id, platformUrl, login, secret) =>
     getReport(
-        MWURLYPLAY + REPORT_SCHEDULE,
+        platformUrl + REPORT_SCHEDULE,
         downloadReportBody(id),
-        mwHeader(getToken(LOGIN_MW_YPLAY, SECRET_MW_YPLAY))
+        mwHeader(getToken(login, secret))
     );
 
 module.exports = {
@@ -83,6 +97,15 @@ module.exports = {
     getAllCustomersYboxActiveTIP,
     getLastestEntryFromSchedule,
     downloadReport,
+    GETALLVODERNANY_UNIFIQUE,
+    GETALLVODERNANY_YPLAY,
+    GETALLVODERNANY_TIP,
+    LOGIN_MW_TIP,
+    LOGIN_MW_YPLAY,
+    LOGIN_MW_UNIFIQUE,
+    SECRET_MW_TIP,
+    SECRET_MW_UNIFIQUE,
+    SECRET_MW_YPLAY,
 };
 
 /**

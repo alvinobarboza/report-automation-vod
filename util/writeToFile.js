@@ -19,6 +19,7 @@ const {
     dataStyle2,
     dataStyle3,
 } = require('./excelStyles');
+const { writeErnaniReport } = require('./ernani.report');
 
 const FILENAMES = [];
 const PATHTOFOLDER = path.join(
@@ -28,14 +29,25 @@ const PATHTOFOLDER = path.join(
     `${getCurrentMonth()}${getCurrentYear()}_${getCurrentDate()}`
 );
 
-const writeToFile = (data) => {
-    const { valideYbox, valideTCM, valideTip } = data;
-
+/**
+ *
+ * @param {*} valideYbox
+ * @param {*} valideTCM
+ * @param {*} valideTip
+ * @param {{
+ *  ernaniValidated: import('./validation.ernani').Dealer[],
+ *  ernaniData: {
+ *      ernaniDataYplay: string[][],
+ *      ernaniDataUnifique: string[][],
+ *      ernaniDataTip: string[][]
+ *  }}} ernani
+ */
+const writeToFile = (valideYbox, valideTCM, valideTip, ernani) => {
     // Create folder for out files
     createFolderForFile();
 
     // Save raw data for future check;
-    saveRawData(valideYbox, valideTCM, valideTip);
+    saveRawData(valideYbox, valideTCM, valideTip, ernani.ernaniData);
 
     // TVN
     writeYboxTip(valideTip);
@@ -50,10 +62,17 @@ const writeToFile = (data) => {
     // A2
     writeA2Report(valideYbox);
 
-    sendEmail(FILENAMES).catch((e) => console.log(e));
+    // Yplay Ernani
+    writeErnaniReport(
+        ernani.ernaniValidated,
+        insertFilenameToFilenames,
+        getPath
+    );
+
+    // sendEmail(FILENAMES).catch((e) => console.log(e));
 };
 
-function saveRawData(ybox, tcm, tip) {
+function saveRawData(ybox, tcm, tip, ernani) {
     fs.writeFileSync(
         getPath(
             `ybox_${getCurrentMonth()}${getCurrentYear()}_${getCurrentDate()}.json`
@@ -73,6 +92,13 @@ function saveRawData(ybox, tcm, tip) {
             `tip_${getCurrentMonth()}${getCurrentYear()}_${getCurrentDate()}.json`
         ),
         JSON.stringify(tip, null, 2),
+        'utf-8'
+    );
+    fs.writeFileSync(
+        getPath(
+            `ernani_${getCurrentMonth()}${getCurrentYear()}_${getCurrentDate()}.json`
+        ),
+        JSON.stringify(ernani),
         'utf-8'
     );
 }

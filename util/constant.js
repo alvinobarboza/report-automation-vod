@@ -6,6 +6,7 @@ const SMSURLTIP = 'https://sms.tvnsul.com.br';
 const MWURLTIP = 'https://mw.tvnsul.com.br';
 const SMSURLSUMICITY = 'https://sms.sumicity.net.br';
 const MWURLSUMICITY = 'https://mw.sumicity.net.br';
+const MWURLUNIFIQUE = 'https://mw.unifiqueplay.com.br';
 const REPORT = '/api/report/reportSelection';
 const REPORT_SCHEDULE = '/api/reportSchedule/downloadReport';
 const REPORT_SCHEDULE_HISTORY = '/api/reportSchedule/historySelection';
@@ -86,6 +87,7 @@ module.exports = {
     MWURLTIP,
     SMSURLSUMICITY,
     MWURLSUMICITY,
+    MWURLUNIFIQUE,
     REPORT,
     REPORT_SCHEDULE,
     REPORT_SCHEDULE_HISTORY,

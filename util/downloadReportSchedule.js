@@ -1,23 +1,43 @@
 const CSVReader = require('./csvReader');
 const type = require('./reports');
 /**
- * @param {()=>Promise<type.MotvResponse<type.RowsReport>>} scheduleHistory
+ * @param {(id: number)=>Promise<type.MotvResponse<type.RowsReport>>} scheduleHistory
  * @param {(id: number)=> Promise<type.MotvResponse<type.ReportFile>>} download
+ * @param {number} id
+ * @param {string} platformUrl
+ * @param {string} login
+ * @param {string} secret
  * @returns {Promise<string[][]>}
  */
-const downloadCSVReportFromSchedule = async (scheduleHistory, download) => {
-    const history = await scheduleHistory();
+const downloadCSVReportFromSchedule = async (
+    scheduleHistory,
+    download,
+    id,
+    platformUrl,
+    login,
+    secret
+) => {
+    const history = await scheduleHistory(id, platformUrl, login, secret);
     const latest = getLastestEntry(history);
 
     if (!latest?.report_schedules_attachements_id) {
         return [[]];
     }
 
-    const fileData = await download(latest.report_schedules_attachements_id);
-    const stringFileData = convertBase64ToString(fileData.response.content);
-
-    const csvReader = new CSVReader(stringFileData);
-    return csvReader.getArrayData();
+    const fileData = await download(
+        latest.report_schedules_attachements_id,
+        platformUrl,
+        login,
+        secret
+    );
+    try {
+        const stringFileData = convertBase64ToString(fileData.response.content);
+        const csvReader = new CSVReader(stringFileData);
+        return csvReader.getArrayData();
+    } catch (er) {
+        console.log(fileData, history.response);
+        throw er;
+    }
 };
 
 /**
