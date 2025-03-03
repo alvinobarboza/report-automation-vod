@@ -1,3 +1,7 @@
+const TCM_VODS = [
+    477, 339, 25, 223, 23, 222, 81, 792, 27, 15, 13, 19, 17, 476, 21,
+];
+
 function validateTCMCustomers(allCustomers) {
     const validData = {
         total: 0,
@@ -5,7 +9,7 @@ function validateTCMCustomers(allCustomers) {
     };
     //very fancy count++
     const totalVODCustomers = allCustomers.reduce((prev, curr) => {
-        if (curr.vendor === 'TCM' && curr.productid === 477) {
+        if (curr.vendor === 'TCM' && isTCMVOD(curr.productid)) {
             prev++;
             validData.customers.push(curr);
         }
@@ -13,6 +17,18 @@ function validateTCMCustomers(allCustomers) {
     }, 0);
     validData.total = totalVODCustomers;
     return validData;
+}
+
+/**
+ * @param {number} id
+ */
+function isTCMVOD(id) {
+    for (const idT of TCM_VODS) {
+        if (idT === id) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function validateYBOXVOD(subscribed, active) {
