@@ -1,6 +1,4 @@
-const TCM_VODS = [
-    477, 339, 25, 223, 23, 222, 81, 792, 27, 15, 13, 19, 17, 476, 21,
-];
+const TCM_VODS = [13, 15, 19, 81, 222, 476, 792];
 
 function validateTCMCustomers(allCustomers) {
     const validData = {
