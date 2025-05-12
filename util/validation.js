@@ -1,5 +1,3 @@
-const TCM_VODS = [13, 15, 19, 81, 222, 476, 792];
-
 /**
  * @typedef {object} AllCustomers
  * @property {number} idsms
@@ -24,7 +22,7 @@ function validateTCMCustomers(allCustomers) {
     const hashSkip = {};
 
     const totalVODCustomers = allCustomers.reduce((prev, curr) => {
-        if (curr.vendor === 'TCM' && isTCMVOD(curr.productid)) {
+        if (curr.vendor === 'TCM') {
             if (hashSkip[curr.login]) {
                 validData.customers.push(curr);
                 return prev;
@@ -37,18 +35,6 @@ function validateTCMCustomers(allCustomers) {
     }, 0);
     validData.total = totalVODCustomers;
     return validData;
-}
-
-/**
- * @param {number} id
- */
-function isTCMVOD(id) {
-    for (const idT of TCM_VODS) {
-        if (idT === id) {
-            return true;
-        }
-    }
-    return false;
 }
 
 function validateYBOXVOD(subscribed, active) {
