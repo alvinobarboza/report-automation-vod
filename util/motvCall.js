@@ -5,7 +5,7 @@ const sha1 = require('js-sha1');
  * @param {string} url
  * @param {string} body
  * @param {{'Authorization-user':string}|{Authorization:string}} header
- * @returns
+ * @returns {Promise<ReportData>}
  */
 const getReport = async (url, body, header) => {
     // console.log(url, body, header);
@@ -36,6 +36,19 @@ const getToken = (login, secret) => {
     const timestamp = Math.round(new Date().getTime() / 1000);
     return login + ':' + timestamp + ':' + sha1(timestamp + login + secret);
 };
+
+/**
+ * @typedef {object} ReportData
+ * @property {number} status
+ * @property {MotvResponse} response
+ */
+
+/**
+ * @typedef {object} MotvResponse
+ * @property {any[]} skip_colunms
+ * @property {number} row_count
+ * @property {any[]} rows
+ */
 
 module.exports = {
     getReport,
