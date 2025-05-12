@@ -1,15 +1,37 @@
 const TCM_VODS = [13, 15, 19, 81, 222, 476, 792];
 
+/**
+ * @typedef {object} AllCustomers
+ * @property {number} idsms
+ * @property {number} idmw
+ * @property {string} login
+ * @property {string} dealer
+ * @property {string} vendor
+ * @property {number} productid
+ * @property {string} product
+
+ */
+
+/**
+ * @param {AllCustomers[]} allCustomers
+ * @returns
+ */
 function validateTCMCustomers(allCustomers) {
     const validData = {
         total: 0,
         customers: [],
     };
-    //very fancy count++
+    const hashSkip = {};
+
     const totalVODCustomers = allCustomers.reduce((prev, curr) => {
         if (curr.vendor === 'TCM' && isTCMVOD(curr.productid)) {
+            if (hashSkip[curr.login]) {
+                validData.customers.push(curr);
+                return prev;
+            }
             prev++;
             validData.customers.push(curr);
+            hashSkip[curr.login] = 'ok';
         }
         return prev;
     }, 0);
